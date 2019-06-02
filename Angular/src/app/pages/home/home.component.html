@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-9 col-sm-12">
+      <div class="card mt-4  py-3 px-4">
+        <form [formGroup]="todoForm" (submit)="form_mode === 'add' ? FormSubmit(): updateTodo()">
+          <div class="form_title text-center">
+            <h5 class="mb-0 font-weight-bold">Add Todo</h5>
+            <hr class="my-2">
+          </div>
+          <div class="form-group position-relative">
+            <label for="title" class="font-weight-bold">Title</label>
+            <input placeholder="Please enter todo title" type="title" class="form-control" formControlName="title"
+              id="title">
+            <div class="error_msg"
+              *ngIf="todoForm.controls['title'].invalid && (todoForm.controls['title'].dirty || todoForm.controls['title'].touched)">
+              <div *ngIf="todoForm.controls['title'].errors.required">
+                <span> Title is required. </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group position-relative">
+            <label for="description" class="font-weight-bold">Description</label>
+            <input placeholder="Please enter todo description" type="description" class="form-control"
+              formControlName="description" id="description">
+            <div class="error_msg"
+              *ngIf="todoForm.controls['description'].invalid && (todoForm.controls['description'].dirty || todoForm.controls['description'].touched)">
+              <div *ngIf="todoForm.controls['description'].errors.required">
+                <span> Description is required. </span>
+              </div>
+            </div>
+          </div>
+          <button [disabled]="!todoForm.valid" type="submit" class="btn btn-primary">
+            <span *ngIf="form_mode === 'add'; else update">Submit</span>
+            <ng-template #update>Update</ng-template>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <hr class="mt-4" *ngIf="todoData.length > 0">
+  <div class="row mt-3 justify-content-center">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngFor="let todo of todoData; let i = index">
+      <div class="card p-3 my-3">
+        <div class="title d-flex justify-content-between align-items-center">
+          <h6 class="mb-0 font-weight-bold">{{todo.title}}</h6>
+          <div>
+            <i class="fas fa-edit mr-2 cursor_pointer" (click)="editTodo(todo, i)"></i>
+            <i class="fas fa-trash cursor_pointer" (click)="deleteTodo(todo._id, i)"></i>
+          </div>
+        </div>
+
+        <div class="description mt-2">
+          <div class="description_part">
+            <p class="mb-0 pr-1">
+              {{todo.description}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 *ngIf="todoData.length >=10" class=" excess_limit">Sorry! you cannot add more todos</h4>
